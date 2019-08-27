@@ -9,6 +9,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"os"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ec2"
@@ -640,6 +641,14 @@ func (i *instance) generateTagsList() []*ec2.TagSpecification {
 			{
 				Key:   aws.String("launched-for-asg"),
 				Value: aws.String(i.asg.name),
+			},
+			{
+        Key: aws.String("environment"),
+        Value: aws.String(os.Getenv("PROJECT_ENVIRONMENT")),
+			},
+			{
+        Key: aws.String("application"),
+        Value: aws.String(os.Getenv("APPLICATION_NAME")),
 			},
 		},
 	}

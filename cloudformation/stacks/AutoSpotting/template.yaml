@@ -254,6 +254,16 @@
         binaries are restricted to up to $1000 in monthly savings, the others
         are not restricted"
       Type: "String"
+    Environment:
+      Default: "prod"
+      Description: >
+        "Set the environment variable for creates the instance tags"
+      Type: "String"
+    Application:
+      Default: "clicks-v2"
+      Description: >
+        "Set the application name for creates the instance tags"
+      Type: "String"
   Conditions:
     StackSetsFalse: !Equals
         - !Ref DeployUsingStackSets
@@ -409,6 +419,10 @@
               Ref: "FilterByTags"
             TERMINATION_NOTIFICATION_ACTION:
               Ref: "TerminationNotificationAction"
+            PROJECT_ENVIRONMENT:
+              Ref: "Environment"
+            APPLICATION_NAME:
+              Ref: "Application"
         Handler:
           Ref: "LambdaHandlerFunction"
         MemorySize:
