@@ -661,9 +661,8 @@ func (i *instance) generateTagsList() []*ec2.TagSpecification {
 		})
 	}
 
-	if len(os.Getenv("CUSTOM_TAGS")) > 0 {
-		var ss []string
-		ss = strings.Split(os.Getenv("CUSTOM_TAGS"), ",")
+	customTags := os.Getenv("CUSTOM_TAGS"); if len(customTags) > 0 {
+		ss := strings.Split(customTags, ",")
 
 		for _, pair := range ss {
 			z := strings.Split(pair, "=")
@@ -674,11 +673,11 @@ func (i *instance) generateTagsList() []*ec2.TagSpecification {
 					Value: aws.String(z[1]),
 				})
 			} else {
-				fmt.Println("Invalid tag. Key or Value is missing.")
+				logger.Println("Invalid tag. Key or Value is missing.")
 			}
 		}
 	} else {
-		fmt.Println("No custom tags provided. Exiting with default tags.")
+		logger.Println("No custom tags provided. Exiting with default tags.")
 	}
 
 	for _, tag := range i.Tags {
