@@ -667,7 +667,7 @@ func (i *instance) generateTagsList() []*ec2.TagSpecification {
 		for _, pair := range ss {
 			z := strings.Split(pair, "=")
 
-			if (len(z) >= 2) {
+			if len(z) >= 2 {
 				tags.Tags = append(tags.Tags, &ec2.Tag{
 					Key:   aws.String(z[0]),
 					Value: aws.String(z[1]),
