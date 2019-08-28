@@ -254,6 +254,12 @@
         binaries are restricted to up to $1000 in monthly savings, the others
         are not restricted"
       Type: "String"
+    CustomTags:
+      Default: ""
+      Description: >
+        "Comma separated key/values to setting in the instances tags.
+        Example: environment=prod,bussines_unit=mobrain,application=clicks-v2"
+      Type: "String"
   Conditions:
     StackSetsFalse: !Equals
         - !Ref DeployUsingStackSets
@@ -409,6 +415,8 @@
               Ref: "FilterByTags"
             TERMINATION_NOTIFICATION_ACTION:
               Ref: "TerminationNotificationAction"
+            CUSTOM_TAGS:
+              Ref: "CustomTags"
         Handler:
           Ref: "LambdaHandlerFunction"
         MemorySize:

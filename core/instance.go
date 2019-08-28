@@ -9,6 +9,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"os"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ec2"
@@ -658,6 +659,26 @@ func (i *instance) generateTagsList() []*ec2.TagSpecification {
 			Key:   aws.String("LaunchConfigurationName"),
 			Value: i.asg.LaunchConfigurationName,
 		})
+	}
+
+	if len(os.Getenv("CUSTOM_TAGS")) > 0 {
+		var ss []string
+		ss = strings.Split(os.Getenv("CUSTOM_TAGS"), ",")
+
+		for _, pair := range ss {
+			z := strings.Split(pair, "=")
+
+			if (len(z) >= 2) {
+				tags.Tags = append(tags.Tags, &ec2.Tag{
+					Key:   aws.String(z[0]),
+					Value: aws.String(z[1]),
+				})
+			} else {
+				fmt.Println("Invalid tag. Key or Value is missing.")
+			}
+		}
+	} else {
+		fmt.Println("No custom tags provided. Exiting with default tags.")
 	}
 
 	for _, tag := range i.Tags {
